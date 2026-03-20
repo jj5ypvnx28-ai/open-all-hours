@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // 🔥 Replace this with your uploaded logo file (put logo.png in /public folder)
-const logo = "/logo.png";
+import logo from "./logo.png";
 
 // 🔗 Put your real Discord invite link here
 const DISCORD_INVITE = "https://discord.gg/fyPqG2Pdcf";
@@ -184,33 +184,6 @@ const initialDivisions = [
   },
 ];
 
-const newsItems = [
-  {
-    title: 'Summer Knockout now underway',
-    tag: 'Tournament News',
-    summary: 'The latest server tournament has kicked off, with first-round matches now being arranged inside Discord.',
-    update: 'Fixtures posted in the tournaments channel.',
-  },
-  {
-    title: 'Premier Division title race tightens',
-    tag: 'League Update',
-    summary: 'Only a handful of points separate the top contenders as the latest weekly results are submitted across the server.',
-    update: 'Full standings refreshed after the latest match night.',
-  },
-  {
-    title: 'Registration open for next event',
-    tag: 'Discord Notice',
-    summary: 'Players in the community can now put their names down for the next tournament directly through the Discord server.',
-    update: 'Sign-ups live now in Discord.',
-  },
-  {
-    title: 'Weekly results roundup posted',
-    tag: 'Results',
-    summary: 'A fresh roundup of division movement, standout results and important scheduling notes has been added for members.',
-    update: 'Catch up in the news feed below.',
-  },
-];
-
 const highlights = [
   { label: 'League Divisions', value: '10', detail: 'Premier + Divisions 1–9' },
   { label: 'Live Tables', value: '100', detail: 'Players tracked across all divisions' },
@@ -250,24 +223,6 @@ function LiveNowBanner({ onlineCount, discordLoading }) {
     </div>
   );
 }
-
-const featuredStories = [
-  {
-    kicker: 'Main Event',
-    title: 'Premier Division title race heats up',
-    body: 'Milkweed sets the pace at the top, but the chasing pack are still in striking distance as the latest results land.',
-  },
-  {
-    kicker: 'On Now',
-    title: 'Summer Knockout fixtures posted',
-    body: 'The latest tournament bracket is live in Discord, with first-round ties now being arranged across the server.',
-  },
-  {
-    kicker: 'Coming Up',
-    title: 'More league nights, more table movement',
-    body: 'Every update can shift promotion, relegation and the title picture across all ten divisions.',
-  },
-];
 
 function getSheetUrl(sheetName) {
   return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
@@ -356,20 +311,11 @@ function StatCard({ label, value, detail }) {
   );
 }
 
-function StoryCard({ kicker, title, body }) {
-  return (
-    <article className="relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-slate-950 p-5 shadow-xl shadow-black/30">
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-sky-400 to-orange-500" />
-      <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-sky-300">{kicker}</p>
-      <h3 className="mt-3 text-2xl font-black uppercase leading-tight tracking-tight text-white">{title}</h3>
-      <p className="mt-3 text-sm leading-6 text-slate-400">{body}</p>
-    </article>
-  );
-}
+
 
 function DivisionTable({ division }) {
   return (
-    <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950 shadow-2xl shadow-black/30">
+    <div className="rounded-[1.5rem] border border-white/10 bg-slate-950 shadow-2xl shadow-black/30">
       <div className="flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-sky-500/15 via-slate-950 to-orange-500/15 px-4 py-4">
         <div>
           <h3 className="text-xl font-black uppercase tracking-tight text-white">{division.name}</h3>
@@ -379,35 +325,35 @@ function DivisionTable({ division }) {
           Live Table
         </div>
       </div>
-      <div className="overflow-x-auto">
-        <div className="min-w-[860px]">
-          <div className="grid grid-cols-[46px_1.6fr_56px_56px_56px_56px_72px_72px_72px_60px] gap-2 border-b border-white/10 bg-slate-900 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.24em] text-slate-400">
-            <div>Pos</div>
-            <div>Player</div>
-            <div>P</div>
-            <div>W</div>
-            <div>D</div>
-            <div>L</div>
-            <div>For</div>
-            <div>Agst</div>
-            <div>Diff</div>
-            <div>Pts</div>
-          </div>
-          {division.table.map((row, index) => (
-            <div key={row.player} className={`grid grid-cols-[46px_1.6fr_56px_56px_56px_56px_72px_72px_72px_60px] gap-2 border-b border-white/5 px-4 py-3 text-sm last:border-b-0 ${index === 0 ? 'bg-gradient-to-r from-sky-500/10 to-transparent' : index < 3 ? 'bg-white/[0.02]' : ''}`}>
-              <div className={`font-black ${index === 0 ? 'text-sky-300' : 'text-white'}`}>{row.pos}</div>
-              <div className="font-semibold text-white">{row.player}</div>
-              <div className="text-slate-300">{row.played}</div>
-              <div className="text-slate-300">{row.won}</div>
-              <div className="text-slate-300">{row.draw ?? 0}</div>
-              <div className="text-slate-300">{row.lost}</div>
-              <div className="text-slate-300">{row.legsFor ?? '-'}</div>
-              <div className="text-slate-300">{row.legsAgainst ?? '-'}</div>
-              <div className={`${(row.legDiff ?? 0) >= 0 ? 'text-slate-200' : 'text-red-300'}`}>{row.legDiff ?? row.legs ?? '-'}</div>
-              <div className="font-black text-orange-300">{row.points}</div>
-            </div>
-          ))}
-        </div>
+      <div className="w-full">
+        <table className="w-full table-fixed border-collapse">
+          <thead>
+            <tr className="border-b border-white/10 bg-slate-900 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 sm:text-[11px]">
+              <th className="w-[36px] px-1 py-3 text-left sm:w-[44px] sm:px-2">Pos</th>
+              <th className="px-2 py-3 text-left">Player</th>
+              <th className="w-[34px] px-1 py-3 text-center sm:w-[42px]">P</th>
+              <th className="w-[34px] px-1 py-3 text-center sm:w-[42px]">W</th>
+              <th className="w-[34px] px-1 py-3 text-center sm:w-[42px]">D</th>
+              <th className="w-[34px] px-1 py-3 text-center sm:w-[42px]">L</th>
+              <th className="w-[46px] px-1 py-3 text-center sm:w-[56px]">Diff</th>
+              <th className="w-[42px] px-1 py-3 text-center sm:w-[52px]">Pts</th>
+            </tr>
+          </thead>
+          <tbody>
+            {division.table.map((row, index) => (
+              <tr key={row.player} className={`border-b border-white/5 text-xs last:border-b-0 sm:text-sm ${index === 0 ? 'bg-sky-500/10' : index < 3 ? 'bg-white/[0.02]' : ''}`}>
+                <td className={`px-1 py-3 text-left font-black sm:px-2 ${index === 0 ? 'text-sky-300' : 'text-white'}`}>{row.pos}</td>
+                <td className="px-2 py-3 text-left font-semibold text-white truncate">{row.player}</td>
+                <td className="px-1 py-3 text-center text-slate-300">{row.played}</td>
+                <td className="px-1 py-3 text-center text-slate-300">{row.won}</td>
+                <td className="px-1 py-3 text-center text-slate-300">{row.draw ?? 0}</td>
+                <td className="px-1 py-3 text-center text-slate-300">{row.lost}</td>
+                <td className={`px-1 py-3 text-center ${(row.legDiff ?? 0) >= 0 ? 'text-slate-200' : 'text-red-300'}`}>{row.legDiff ?? row.legs ?? '-'}</td>
+                <td className="px-1 py-3 text-center font-black text-orange-300">{row.points}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
@@ -492,15 +438,18 @@ export default function OpenAllHoursDartsWebsite() {
           </div>
           <nav className="hidden items-center gap-6 text-sm font-medium text-slate-300 lg:flex">
             <a href="#divisions" className="transition hover:text-white">Divisions</a>
-            <a href="#news" className="transition hover:text-white">News</a>
             <a href="#discord" className="transition hover:text-white">Discord</a>
             <a href={DISCORD_INVITE} target="_blank" rel="noreferrer" className="rounded-full bg-orange-500 px-4 py-2 font-semibold text-white transition hover:bg-orange-400">Join Server</a>
           </nav>
         </div>
       </header>
 
-      <section className="relative overflow-hidden border-b border-sky-400/10 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.16),_transparent_26%),radial-gradient(circle_at_top_right,_rgba(249,115,22,0.18),_transparent_24%),linear-gradient(180deg,_#07101f_0%,_#050b16_55%,_#091222_100%)]">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:36px_36px] opacity-20" />
+      <section className="relative overflow-hidden border-b border-emerald-400/10 bg-[radial-gradient(circle_at_top_left,_rgba(34,197,94,0.18),_transparent_25%),radial-gradient(circle_at_top_right,_rgba(249,115,22,0.20),_transparent_22%),radial-gradient(circle_at_bottom_left,_rgba(236,72,153,0.16),_transparent_24%),linear-gradient(180deg,_#14091f_0%,_#050b16_52%,_#0d1a14_100%)]">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:38px_38px] opacity-10" />
+        <div className="absolute -left-10 top-10 h-72 w-72 rounded-full bg-pink-500/10 blur-3xl" />
+        <div className="absolute right-0 top-20 h-80 w-80 rounded-full bg-orange-500/10 blur-3xl" />
+        <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(90deg,transparent,rgba(34,197,94,0.14),transparent)]" />
         <div className="relative mx-auto max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:pb-16 lg:pt-10">
           <div className="mb-6 flex flex-wrap items-center gap-3 text-[11px] font-bold uppercase tracking-[0.28em] text-slate-300">
             <span className="rounded-full border border-sky-400/20 bg-sky-400/10 px-4 py-2 text-sky-300">Live Tables</span>
@@ -510,19 +459,16 @@ export default function OpenAllHoursDartsWebsite() {
           </div>
           <div className="grid gap-8 xl:grid-cols-[1.2fr_0.8fr]">
             <div className="rounded-[2rem] border border-white/10 bg-slate-950/70 p-8 shadow-2xl shadow-black/30 backdrop-blur">
-              <p className="text-[11px] font-bold uppercase tracking-[0.34em] text-sky-300">Open All Hours Darts</p>
-              <h1 className="mt-4 max-w-4xl text-5xl font-black uppercase leading-[0.92] tracking-tight text-white md:text-7xl">
-                A league website with a proper PDC feel.
-              </h1>
+              <p className="text-[11px] font-bold uppercase tracking-[0.34em] text-pink-300">Open All Hours Darts</p>
               <p className="mt-6 max-w-2xl text-lg text-slate-300">
-                Live division tables, current tournament coverage and Discord-first league updates presented in a sharper match-centre style.
+                Live division tables, Discord-first league updates and a louder, more fun match-night style for the Open All Hours community.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
-                <a href="#divisions" className="rounded-full bg-sky-400 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-slate-950 transition hover:opacity-90">
+                <a href="#divisions" className="rounded-full bg-emerald-400 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-slate-950 transition hover:opacity-90">
                   View Tables
                 </a>
-                <a href="#news" className="rounded-full border border-white/15 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:bg-white/10">
-                  Tournament News
+                <a href="#discord" className="rounded-full border border-white/15 px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:bg-white/10">
+                  Join Discord
                 </a>
               </div>
               <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -544,9 +490,12 @@ export default function OpenAllHoursDartsWebsite() {
                 </div>
               </div>
               <div className="grid gap-5">
-                {featuredStories.map((story) => (
-                  <StoryCard key={story.title} {...story} />
-                ))}
+                <div className="relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-slate-950 p-5 shadow-xl shadow-black/30">
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-pink-500 via-orange-500 to-emerald-400" />
+                  <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-pink-300">League Vibe</p>
+                  <h3 className="mt-3 text-2xl font-black uppercase leading-tight tracking-tight text-white">Late-night darts energy, not a boring stats page.</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">A brighter graffiti-style background, bolder colours and live league tables keep the website feeling more like your Discord community.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -583,30 +532,6 @@ export default function OpenAllHoursDartsWebsite() {
 
         <section className="mb-16">
           <LiveNowBanner onlineCount={onlineCount} discordLoading={discordLoading} />
-        </section>
-
-        <section id="news" className="mb-16">
-          <SectionHeading
-            eyebrow="Server Feed"
-            title="News & Current Tournament Updates"
-            copy="Use this area to highlight what is happening in the Discord server right now, including tournament progress, sign-ups and weekly notices."
-          />
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {newsItems.map((item) => (
-              <article key={item.title} className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950 p-6 shadow-xl shadow-black/30">
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-sky-400 to-orange-500" />
-                <div className="inline-flex rounded-full bg-sky-400/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-sky-300">
-                  {item.tag}
-                </div>
-                <h3 className="mt-4 text-2xl font-black tracking-tight text-white">{item.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-slate-400">{item.summary}</p>
-                <div className="mt-5 rounded-2xl border border-white/10 bg-slate-900/80 p-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-orange-300">Current Update</p>
-                  <p className="mt-2 text-sm text-slate-300">{item.update}</p>
-                </div>
-              </article>
-            ))}
-          </div>
         </section>
 
         <section id="discord" className="mb-16">
